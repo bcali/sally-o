@@ -1,8 +1,37 @@
 import React, { useState } from 'react';
 import { LogIn, Sparkles, MapPin, Heart } from 'lucide-react';
+import LoginScreen from './components/LoginScreen';
 
 function App() {
   const [isHovered, setIsHovered] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'login' | 'dashboard'>('welcome');
+
+  const handleContinueWithGoogle = () => {
+    setCurrentScreen('login');
+  };
+
+  const handleBackToWelcome = () => {
+    setCurrentScreen('welcome');
+  };
+
+  const handleLoginSuccess = () => {
+    setCurrentScreen('dashboard');
+  };
+
+  if (currentScreen === 'login') {
+    return <LoginScreen onBack={handleBackToWelcome} onLoginSuccess={handleLoginSuccess} />;
+  }
+
+  if (currentScreen === 'dashboard') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-300 to-blue-400 flex items-center justify-center">
+        <div className="text-center text-white">
+          <h1 className="text-4xl font-bold mb-4 font-dancing-script">Welcome to your dashboard!</h1>
+          <p className="text-lg opacity-90">Hotel search functionality coming soon...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-300 to-blue-400 relative overflow-hidden">
@@ -56,6 +85,7 @@ function App() {
           {/* CTA Button */}
           <div className="mb-8">
             <button
+              onClick={handleContinueWithGoogle}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               className="group bg-white text-purple-600 px-8 py-4 rounded-full text-lg font-semibold shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 flex items-center gap-3 mx-auto"
