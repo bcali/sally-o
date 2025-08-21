@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { LogIn, Sparkles, MapPin, Heart } from 'lucide-react';
 import LoginScreen from './components/LoginScreen';
+import OnboardingFlow from './components/OnboardingFlow';
 
 function App() {
   const [isHovered, setIsHovered] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'login' | 'dashboard'>('welcome');
+  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'login' | 'onboarding' | 'dashboard'>('welcome');
 
   const handleContinueWithGoogle = () => {
     setCurrentScreen('login');
@@ -15,19 +16,32 @@ function App() {
   };
 
   const handleLoginSuccess = () => {
+    setCurrentScreen('onboarding');
+  };
+
+  const handleOnboardingComplete = (preferences: any) => {
+    console.log('User preferences:', preferences);
     setCurrentScreen('dashboard');
+  };
+
+  const handleBackToLogin = () => {
+    setCurrentScreen('login');
   };
 
   if (currentScreen === 'login') {
     return <LoginScreen onBack={handleBackToWelcome} onLoginSuccess={handleLoginSuccess} />;
   }
 
+  if (currentScreen === 'onboarding') {
+    return <OnboardingFlow onComplete={handleOnboardingComplete} onBack={handleBackToLogin} />;
+  }
+
   if (currentScreen === 'dashboard') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-300 to-blue-400 flex items-center justify-center">
         <div className="text-center text-white">
-          <h1 className="text-4xl font-bold mb-4 font-dancing-script">Welcome to your dashboard!</h1>
-          <p className="text-lg opacity-90">Hotel search functionality coming soon...</p>
+          <h1 className="text-4xl font-bold mb-4 font-dancing-script">Welcome back, traveler!</h1>
+          <p className="text-lg opacity-90">Your personalized hotel search is ready...</p>
         </div>
       </div>
     );
